@@ -909,6 +909,12 @@ void TextureViewer::RT_UpdateVisualRange(IReplayController *r)
   }
 }
 
+template<typename T>
+void AddBinary(QString &out, const char* str, T value)
+{
+   out += QFormatstr(str).arg(Formatter::BinFormat(*((uint32_t*)value)));
+}
+
 void TextureViewer::UI_UpdateStatusText()
 {
   TextureDescription *texptr = GetCurrentTexture();
@@ -1077,8 +1083,9 @@ void TextureViewer::UI_UpdateStatusText()
       if(uintTex)
       {
         pickedText += QFormatStr("%1").arg(Formatter::Format(val.uintValue[0]));
-        if(tex.format.compCount > 1)
+        if(tex.format.compCount > 1) {
           pickedText += QFormatStr(", %1").arg(Formatter::Format(val.uintValue[1]));
+        }
         if(tex.format.compCount > 2)
           pickedText += QFormatStr(", %1").arg(Formatter::Format(val.uintValue[2]));
         if(tex.format.compCount > 3)
@@ -1104,6 +1111,14 @@ void TextureViewer::UI_UpdateStatusText()
         if(tex.format.compCount > 3)
           pickedText += QFormatStr(", %1").arg(Formatter::Format(val.floatValue[3]));
       }
+
+        pickedText += QFormatStr(" Bin: %1").arg(Formatter::BinFormat(val.uintValue[0]));
+      if(tex.format.compCount > 1)
+          pickedText += QFormatStr(", %1").arg(Formatter::BinFormat(val.uintValue[1]));
+      if(tex.format.compCount > 2)
+          pickedText += QFormatStr(", %1").arg(Formatter::BinFormat(val.uintValue[2]));
+      if(tex.format.compCount > 3)
+          pickedText += QFormatStr(", %1").arg(Formatter::BinFormat(val.uintValue[3]));
     }
 
     if(m_TexDisplay.customShaderId != ResourceId())
